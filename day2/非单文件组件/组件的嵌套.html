@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+</head>
+<!-- 注意看每个层级怎么进行嵌套的  app组件是vm之下，其他组件之上，标准开发必须要写的 -->
+<body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+    </div>
+
+    <script>
+        Vue.config.productionTip = false;
+        //定义student组件(局部)
+        const student = {
+            template: `
+            <div>
+                <h1>学生名称:{{name}}</h1>
+                <h1>称号:{{nickname}}</h1>
+            </div>
+            `,
+            data() {
+                return {
+                    name: '张星宇',
+                    nickname: '送财童子'
+                }
+            },
+        }
+        //定义school组件(局部)
+        const school = {
+            template: `
+            <div>
+                <h1>学校名称:{{name}}</h1>
+                <h1>学校地址:{{address}}</h1>
+                <student></student>
+            </div>
+            `,
+            // 注意看 <student></student>放在了template里实现嵌套
+            data() {
+                return {
+                    name: '山东拐大',
+                    address: '嘉里敦'
+                }
+            },
+            //将student嵌套在school里面
+            components: {
+                student
+            }
+        }
+
+        //定义一个hello组件
+        const hello = Vue.extend({
+            template: `<h2>{{msg}}</h2>`,
+            data() {
+                return {
+                    msg: 'hello啊树哥'
+                }
+            }
+        })
+
+        //定义app组件
+        const app = Vue.extend({
+            template:
+                `
+            <div>
+                <school></school>
+        <hello></hello>
+                </div>
+            `,
+            components: {
+                school,
+                hello,
+            }
+        })
+
+        //创建 vm 实例对象
+        const vm = new Vue({
+            //指定控制的区域
+            el: '#app',
+            data: {},
+            components: {
+                app
+            },
+            template:`<app></app>`
+        });
+    </script>
+</body>
+
+</html>

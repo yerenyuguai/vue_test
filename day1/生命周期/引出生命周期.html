@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+</head>
+<!-- 
+    生命周期:
+1.又名:生命周期回调函数、生命周期函数、生命周期钩子。
+2.是什么:Vue在关键时刻帮我们调用的一些特殊名称的函数。
+3.生命周期函数的名字不可更改，但函数的具体内容是程序员根据需求编写的。
+4.生命周期函数中的this指向是vm或组件实例对象。
+ -->
+<body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+        <h2 v-if="a">缓缓的枫叶飘落像思念</h2>
+        <h2 :style="{opacity:opacity}">我点燃烛火温暖岁末的秋天</h2>
+        <!-- opacity:  透明度  1 透明度百分百 -->
+    </div>
+
+    <script>
+        Vue.config.productionTip = false;
+        //创建 vm 实例对象
+        const vm = new Vue({
+            //指定控制的区域
+            el: '#app',
+            data: {
+                opacity: 1,
+                a:true
+            },
+            methods: {
+            },
+            //mounted    挂载完毕  vue完成模板的解析，并把真实的DOM元素放入页面后（挂载完毕后）调用mounted
+            // 第一次放入页面叫挂载，之后数据更新等重新解析模板叫更新，注意区分
+            // 只调用一次  关键性的时刻调用关键性的函数
+            // 这就是一个生命周期函数，在（挂载完毕后）调用
+            mounted() {
+                console.log(this);//this就是vm
+                setInterval(() => {
+                        this.opacity -= 0.01
+                        if (this.opacity <= 0) { this.opacity = 1 }
+                    }, 16)
+            },
+        });
+       /*  通过外部的定时器实现割裂，写在vue外面影响观感，建议写在内部
+        setInterval(()=>{
+            vm.opacity-=0.01
+            if(vm.opacity<=0){vm.opacity=1}
+        },16)
+        */
+    </script>
+</body>
+
+</html>

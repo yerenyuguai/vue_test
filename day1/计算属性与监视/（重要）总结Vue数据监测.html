@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+  </head>
+<!-- 
+    Vue监视数据的原理:
+1. vue会监视data中所有层次的数据。
+2.如何监测对象中的数据?
+通过setter实现监视，且要在 new Vue 时就传入要监测的数据。
+(1).对象中后追加的属性，Vue默认不做响应式处理(即为不能做到页面数据的更新,没有get和set方法)
+(2) .如需给后添加的属性做响应式，请使用如下API:
+Vue.set(target, propertyName/index, value) 或
+Vm.$set(target, propertyName/index, value)
+3. 如何监测数组中的数据?
+通过包裹数组更新元素的方法实现，本质就是做了两件事:
+(1).调用原生对应的方法对数组进行更新。
+(2).重新解析模板，进而更新页面。
+4.在Vue修改数组中的某个元素一定要用如下方法: 
+1.使用这些API:push()、pop()、 shift()、 unshift()、 splice()、 sort() ,reverse() I
+2.Vue.set()或vm. $set()
+特别注意: Vue.set() 和vm.$set() 不能给vm或vm的根数据对象添加属性! ! ! 即为data
+
+
+
+数据劫持，指的是在访问或者修改对象的某个属性时，通过一段代码拦截这个行为，进行额外的操作或者修改返回结果。
+通俗点就是  如果有人修改了这里的student,马上就被setter劫持到,会帮你修改数据,或者重新解析模板
+ -->
+  <body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+        <h1>学生信息</h1>
+        <button @click="student.age++">拐子年龄+1</button><br>
+        <button  @click="addSex">添加性别属性，默认男</button><br>
+        <button  @click="student.sex='女' ">修改性别</button> <br>
+        <!-- 注意 要加上引号变为字符串 '女' -->
+        <button @click="addfriend">在列表首位添加一个朋友，名字为苍蝇</button><br>
+        <button @click="updateFirstFriendName">修改第一个朋友的名字叫孙悟空</button><br>
+        <button @click="addhobby">添加一个爱好</button><br>
+        <button @click="updateHobby">修改第一个爱好为：养猪</button><br>
+        <button @click="removeSendMilk">过滤掉爱好中的送奶</button>
+        <h3>姓名；{{student.name}}</h3>
+        <h3>年龄；{{student.age}}</h3>
+        <h3 v-if="student.sex">性别；{{student.sex}}</h3>
+        <h3>爱好</h3>
+        <ul>
+            <li v-for="(h,index) in student.hobby" :key="index">{{h}}</li>
+        </ul>
+        <h3>朋友们</h3>
+        <ul>
+            <li v-for="(f,index) in student.friends" :key="index">{{f.name}},{{f.age}}</li>
+        </ul>
+    </div>
+
+    <script>
+        Vue.config.productionTip=false;
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+            student:{
+                name:'拐子',
+                age:18,
+                hobby:['送钱','送奶','拐事'],
+                friends:[
+                    {name:'野浩',age:19},
+                    {name:'洪少',age:20}
+                ]
+            }
+        },
+        methods: {
+            addSex(){
+                Vue.set(this.student,'sex','男')
+                //vm.$set(this.student,'sex','男')
+                //this.$set(this.student,'sex','男') 等价
+            },
+            addfriend(){
+                this.student.friends.unshift({name:'苍蝇',age:19})
+                //  用了可以改变数组的七个api,vue就能监测到,更新时的一个问题上有说明
+                //  push,pop,shift,unshift,splice,reserve,sort
+
+            },
+            updateFirstFriendName(){
+                // vue 数组不可以监测,但是数组对象可以监测
+                this.student.friends[0].name='孙悟空'
+            },
+            addhobby(){
+                this.student.hobby.push('噶奶');
+            },
+            updateHobby(){
+                //  this.student.hobby[0]='养猪'  这种方式vue监测不到,页面也不会相应
+              //    this.student.hobby.splice(0,1,'养猪'); 也可以
+              Vue.set(this.student.hobby,0,'养猪')
+            },
+            removeSendMilk(){
+                //过滤filter() 不影响原数组
+                //⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+//push()、pop()、 shift()、 unshift()、 splice()、 sort() ,reverse() I 这几个方法 
+// vue将被监听的数组的变更方法进行了包裹,所以他们也会进行视图更新, 这就是变更方法
+// 但同时也有非变更方法,例如 filter() concat() slice() 他们不会对原来的数组产生影响,而总是返回一个新的数组
+// 所以当使用非变更方法时候,可以用新数组代替旧数组,就像下面
+
+                //  但是这种赋值形式this.student.hobby=... 相当于将过滤后的数组,把原数组覆盖掉了
+                this.student.hobby=this.student.hobby.filter((h)=>{ //所以不是由vue所控制的回调,尽可能写成回调函数
+                    return h!=='送奶'
+                })
+            }
+        }
+       });
+    </script>
+  </body>
+</html>

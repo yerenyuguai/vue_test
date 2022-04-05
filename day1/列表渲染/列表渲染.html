@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+  </head>
+<!-- 
+  v-for指令：
+  1  用来展示列表数据
+  2  语法  v-for="(item,index) in xxx":key="yyyy"
+  3  可以遍历 数组，对象，字符串和指定次数(后两者用的少)
+ -->
+  <body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+      <!-- 遍历数组 -->
+      <ul>
+        <!-- key="p.id  每一个结点的标识 -->
+        <li v-for="p in persons" :key="p.id">{{p.name}}-{{p.nickname}}</li>
+      </ul>
+      <!-- 遍历对象 -->
+      <ul>
+        <li v-for="(a,b) of car">
+          <!--  of   in  功能一样 -->
+          {{a}}-{{b}}
+        </li>
+      </ul>
+      <!-- 遍历字符串 -->
+      <ul style="list-style-type: none;">
+        <li v-for="s in str" style="display: inline;">{{s}}</li>
+      </ul>
+      <!-- 测试遍历次数 -->
+      <ul>
+        <li v-for="(a,b) of 5" >
+          {{a}}计数值-{{b}}索引值
+        </li>
+      </ul>
+    </div>
+
+    <script>
+        Vue.config.productionTip=false;
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+          persons:[
+            {id:'001',name:'拐子',nickname:'送财童子'},
+            {id:'002',name:'野浩',nickname:'噶奶居士'},
+            {id:'003',name:'洪少',nickname:'蛮横狂徒'},
+          ],
+          car:{
+            name:'奥迪A8',
+            price:'70w',
+            color:'黑色'
+          },
+          str:'窗外的麻雀,在电线杆上多嘴'
+        },
+       });
+    </script>
+  </body>
+</html>

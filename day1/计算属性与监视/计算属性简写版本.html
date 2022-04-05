@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+  </head>
+  <body>
+    <!-- 被 vm 实例所控制的区域 -->
+    <div id="app">
+        姓： <input type="text" v-model="firstname"><br><br>
+        名： <input type="text" v-model="lastname"><br><br>
+        全名：<span>{{fullname}}</span>
+
+    </div>
+    <script>
+        Vue.config.productionTip=false;
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+            firstname:'拐',
+            lastname:'子'
+        },
+        computed: {
+              /*
+            fullname:{ 
+                get(){
+                    console.log('get被调用了');
+                    return this.firstname+' '+this.lastname;
+                },
+                set(value){
+                    console.log('set被调用了');
+                    const arr=value.split(' ');//用这个区分
+                    this.firstname=arr[0];
+                    this.lastname=arr[1];
+                }
+          
+            }
+             */
+        // 确定这个属性是只读不改的时候才能用简写形式
+
+        //同样不要理所当然的认为fullname()属性是个函数，然后直接调用
+        // 他也是将返回的值给vm，然后这个值叫做fullname
+        //所以 {{fullname}} 不能写成 {{fullname()}}
+        fullname(){  //fullname:function(){} 的简写形式
+            return this.firstname+' '+this.lastname;
+        }
+        }
+       });
+    </script>
+  </body>
+</html>

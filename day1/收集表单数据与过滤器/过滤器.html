@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="dayjs.min.js"></script>
+    <!-- 引入导入到dayjs -->
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+  </head>
+<!-- 去bootcdn引入一个库     moment.js 它是一个js日期处理类的库,用于解析,检验,操作和显示日期   但是体积大
+    day.js  和moment.js的api设计保持完全一样,只不过相比更轻量   这里可以试试点击复制链接,然后链接到地址栏,
+    ctrl+s保存到想要的位置
+-->
+
+<!-- 
+    过滤器:
+定义:对要显示的数据进行特定格式化后再显示(适用于些简单逻辑的处理)
+语法: 
+1.注册过滤器:  全局 Vue.filter(name,callback)或   局部 new Vue{filters:{}}
+2.使用过滤器: {{ xxx |过滤器名}} 或 v-bind:属性 = "xxx|过滤器名"
+备注:
+1.过滤器也可以接收额外参数、多个过滤器也可以串联
+2.并没有改变原本的数据，是产生新的对应的数据
+ -->
+  <body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+        <h2>显示格式化后的事件</h2>
+        <h3>{{time}}</h3>
+        <h3>计算属性computed实现后{{newTime}}</h3>
+        <h3>methods实现:{{getNewTime()}}</h3> 
+         <!--注意   函数名() 这个才表示调用 computed本身就是会返回的    -->
+         <br><br><br>
+         <!-- vue的过滤器实现 -->
+         <h3>过滤器实现:{{time | timeFormater}}</h3> 
+         <h3>过滤器实现传参版本:{{time | timeFormater('YYYY_MM_DD')}}</h3> 
+         <h3>多个过滤器实现传参版本:{{time | timeFormater('YYYY_MM_DD') | mySlice}}</h3> 
+         <!-- linux  里的管道符 -->
+    </div>
+    <hr>
+    <div id="root">
+        <!-- 这个div里用另一个div里的过滤器 -->
+        <h3>过滤器实现:{{ str | mySlice}}</h3> 
+        <!-- 发现并没有实现裁剪  期望输出 hell  然后点击检查发现报错 -->
+         
+    </div>
+    <script>
+        Vue.config.productionTip=false;
+
+        //⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐  这样就定义了一个全局的过滤器
+        Vue.filter('mySlice',function(value){
+            return value.slice(0,4) //截取前四位
+        })
+
+
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        msg:'我在这儿等着你回来~',
+        data:{
+            time:1647933411695 ,// 时间戳  Date.now()获取
+        },
+        computed:{
+            newTime(){
+                return dayjs(this.time).format('YYYY-MM-DD HH:mm:ss');
+                //这个是dayjs库里自己封装好的方法
+            }
+        },
+        methods: {
+            getNewTime(){
+                //和上面一样
+                return dayjs(this.time).format('YYYY-MM-DD HH:mm:ss');
+            }
+        },
+        // 这是过滤器,和data同一层  他的本质就是一个函数 
+        // 下面的是局部过滤器  只能限制在这个div模板里面
+        filters:{
+            timeFormater(value,str='YYYY-MM-DD HH:mm:ss'){  //形参赋值,es6里的
+
+                return dayjs(value).format(str);// 由参数就用参数,没有参数,就用str给的参数
+                //return dayjs(this.time).format('YYYY-MM-DD HH:mm:ss');  返回此刻时间
+            }
+        }
+       });
+       const vm1=new Vue({
+           el:'#root',
+           data:{
+               str:'hello world'
+           },
+       })
+    </script>
+  </body>
+</html>

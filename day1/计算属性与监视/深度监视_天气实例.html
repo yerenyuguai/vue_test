@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+  </head>
+<!-- 
+深度监视:
+(1).Vue中的watch默认不监测对象内部值的改变(一层)。
+(2).配置deep:true可以监测对象内部值改变(多层)
+备注: 
+(1).Vue自身可以监测对象内部值的改变，但Vue提供的watch默认不可以!
+(2) .使用watch时根据数据的具体结构，决定是否采用深度监视。
+ -->
+  <body>
+    <!-- 被 vm 实例所控制的区域 -->
+    <div id="app">
+        <h2>今天天气很{{info}}</h2>
+        <button @click="changeweather">切换天气</button>
+        <hr>
+        <h3>a的值为{{numbers.a}}</h3>
+        <button @click="numbers.a++">点我让a++</button>
+        <hr>
+        <h3>b的值为{{numbers.b}}</h3>
+        <button @click="numbers.b++">点我让b++</button>
+        <button @click="numbers={a:123,b:456}">彻底替换掉numbers</button>
+    </div>
+
+    <script>
+        Vue.config.productionTip=false;
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+            isHot:true ,//默认为炎热 false为凉爽
+            numbers:{
+                a:1,
+                b:1
+            }
+        },
+        computed:{
+            info(){
+                return this.isHot?'炎热':'凉爽'
+            }
+        },
+        methods: {
+            changeweather(){
+                this.isHot=!this.isHot;//和上面的this都是指向的vm
+            }
+        },
+        watch:{
+            isHot:{
+                handler(newValue,oldValue){
+                    console.log('isHot被修改了',newValue,oldValue);
+                },
+            },
+            //isHot等初始形式都是'isHot',但是可以简写，但是 number.a直接写就会报错，这是不合法的，所以不能简写
+            //    'numbers.a'  只检测numbers里的a，不监测b
+            // 监视多级结构中某个属性的变化
+            'numbers.a':{
+                handler(){
+                    console.log('a被修改了');
+                },
+            },
+            //但是如果numbers里面有成百上千个数字呢，不能连续监视这么多次吧
+            // 现在想让 numbers任何一个数字发生改变，都可以监视到，就可以这样
+            numbers:{
+                // 深度，默认值为false   
+                deep:true,
+                handler(){
+                    console.log('a被修改了');
+                }
+            }
+        },
+
+       });
+    </script>
+  </body>
+</html>

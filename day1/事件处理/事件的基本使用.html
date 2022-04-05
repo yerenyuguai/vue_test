@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+  </head>
+
+  <body>
+    <!-- 被 vm 实例所控制的区域 -->
+    <div id="app">
+        <h2>我是{{name}}</h2>
+        <button v-on:click="showInfo">点我出提示</button>
+        <!--   v-on:   可以简写为@ -->
+        <button @click="showInfo2(66,$event)" value="">点我出提示（简写且传参）</button>
+        <!-- 如果需要传参数  直接像上面的那种形式   如果不写$event 默认会把event事件无视，如果需要的话就像上面-->
+    </div>
+<!-- 
+    事件的基本使用
+1.使用v-on:xxx 或@xxx 绑定事件，其中xxx是事件名:
+2.事件的回调需要配置在methods对象中，最终会在vm上;
+3. methods中配置的函数。不要用箭头函数!否则this就不是vm了;
+4. methods中配置的函数，都是被Vue所管理的函数，this的指向是vm或组件实例对象;
+5. @click="demo"和@click="demo($event)"效果致，但后者可以传参;
+ -->
+    <script>
+        Vue.config.productionTip=false;
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+            name:'拐子'
+        },
+        methods: {
+            showInfo(){// 默认传参时event
+                alert('外号是送财童子!')
+                console.log(this===vm);//这里的this就是vm
+                // 但是如果写成箭头函数  showInfo:()=>{  }  因为箭头函数没有this，就会往外找，找到了window
+                //  所以一般写成普通函数即可，不要写成箭头函数
+                // 即为 function showInfo(){}   对象里写方法直接写方法名字即为 showInfo(){} 
+             },
+             showInfo2(a,b){
+                 alert(a)
+                 // 这个b就是event
+                 console.log(b);
+                 
+             }
+             //提一嘴 data里的是可以进行数据代理的（还有数据劫持），而showInfo和shouInfo2只是用来调用
+             //如果写在data里，就会生成 get showInfo()和set showInfo() 没有意义，而且增加vue实例的负担
+
+        }
+       });
+    </script>
+  </body>
+</html>

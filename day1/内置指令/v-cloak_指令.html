@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+    <style>
+        [v-cloak]{
+            display: none; 
+            /* 不让这个属性对应的东西显示,从而避免未经解析的模板跑到页面*/
+        }
+        /* 这是属性选择器,忘记了去css补补 */
+    </style>
+  </head>
+<!-- 
+    由于没有延时的外部文件,所以这一个文件只能脑补
+ -->
+  <body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+        <h2 v-cloak>{{name}}</h2>
+        <!--
+            vue一旦接手,就会把v-cloak移除 
+            配合css属性选择器当网速过慢的时候,可以阻止让未经解析的模板跑到页面上去 -->
+        <!-- 假设这里设置了一个外部的vue.js  他来控制网速延迟五秒,
+            脑补页面接下来五秒的结果是{{name}},为什么呢??
+            这是因为由于页面渲染是从上至下的,
+        上面读取的是  <h2 v-cloak>{{name}}</h2> 而{{name}}需要vue实例帮助解析,但是被这个假设的外部js文件
+    进行延迟了五秒,所以这五秒一直处于未编译状态,这样或许观感和用户体验是很差的,会造成页面闪现的效果
+所以为了避免这种情况,延迟的五秒内用属性选择器将其隐藏  [v-cloak]{display: none;}  -->
+    </div>
+
+    <script>
+        Vue.config.productionTip=false;
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+            name:'你的回话凌乱着'
+        },
+       });
+    </script>
+  </body>
+</html>

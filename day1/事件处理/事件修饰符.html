@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+    <style>
+        .demo1{
+            width: 100px;
+            height: 100px;
+            background: red;
+            border: 2px solid green;
+        }
+        #box1{
+            width: 100px;
+            height: 100px;
+            background-color: aqua;
+        }
+        #box2{
+            width: 50px;
+            height: 50px;
+            background-color:yellow;
+        }
+        .list{
+            width:200px;
+            height: 200px;
+            background: rebeccapurple;
+            overflow: scroll;
+        }
+        li{
+            height: 100px;
+        }
+    </style>
+  </head>
+<!-- 
+    Vue中的事件修饰符:
+1      .prevent:阻止默认事件(常用) ;
+2      .stop:阻止事件冒泡(常用) ;
+3      .once:事件只触发一次(常用):
+4      .capture:使用事件的捕获模式;
+5      .self:只有event，target是当前操作的元素是才触发事件: 
+6      .passive:事件的默认行为立即执行无需等待事件回调执行完毕;
+
+也是可以连续写的
+@click.stop.prevent 先阻止冒泡,再阻止默认行为
+ -->
+  <body>
+    <!-- 被 vm 实例所控制的区域 -->
+    <div id="app">
+        <h1>欢迎来到{{name}}</h1>
+        <!-- 这个就是阻止默认事件 -->
+        <a href="http://www.baidu.com" @click.prevent="showInfo">点我提示信息</a>
+        <!--  .prevent 就是一个事件修饰符 -->
+        <hr>
+
+
+        <!-- 阻止事件冒泡 -->
+        <!--   因为点击按钮后首先button触发，然后div触发，会弹出两次弹窗，这就是个冒泡
+            （多个组件嵌套，触发内层组件时候，会一一触发外层事件）
+        取消这个行为    在想要结束冒泡的地方 .stop 就可以取消父的事件触发-->
+        <div class="demo1" @click="showInfo">
+            <button @click.stop="showInfo">点我</button>
+        </div>
+        <hr>
+
+        <!-- 事件只触发一次  就相当于一次性按钮，生效后依次就不生效了-->
+        <button @click.once="showInfo">点我</button>
+        <hr>
+
+        <!-- 使用事件的捕获模式 （从外向内  ，而事件冒泡是由内向外） 事件处理都是先捕获在冒泡-->
+        <!-- 点击div1就把数字1传进来，点击div2就把数字2传进来,因为div1和div2嵌套，所以点击div2会输出1和2 -->
+        <!-- 这个修饰符，就是在事件捕获阶段就进行处理，默认输出是在冒泡阶段，所以点击div2默认是2，1 ，但是
+        加了修饰符后，就可以在捕获阶段就进行输出 为 1，2-->
+        <div id="box1"  @click.capture="showMsg(1)">
+            div1
+            <div id="box2"  @click="showMsg(2)">
+                div2
+            </div>
+        </div>
+        <hr>
+
+        <!-- 只有event，target是当前操作的元素是才触发事件:  -->
+        <!-- 不写  .self默认是alert两次(自身一次，冒泡一次)，但是这个就确定了触发div，且event，target是div时去调用 
+        @click.self="showInfo这里的showifno   也可以变相的阻止冒泡-->
+        <div class="demo1" @click.self="showInfo">
+            <button @click="showInfo">点我</button>
+        </div>
+        <hr>
+
+        <!-- .passive:事件的默认行为立即执行无需等待事件回调执行完毕; -->
+        <ul class="list" @wheel.passive="demo"  >  
+    <!--@wheel='demo'（这是滚轮，只有鼠标滚轮动）也可以写成@scroll="demo" (这是滚动条，只要滚动条动，到达边界就没效果)-->
+    <!-- demo里写了一个函数, 默认行为(滚动条滚动)是要等待回调函数执行完成，所以滚动条要到回调函数执行完成后才能滚动
+    而.passive 就取消了这个默认行为，滚动后无需等待回调完成就可立即执行 -->
+    <!-- 移动端会用到较多 -->
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+        </ul>
+    </div>
+
+    <script>
+        Vue.config.productionTip=false;
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+            name:'魔法学院'
+        },
+        methods: {
+            showInfo(event){
+               // event.preventDefault();  //取消默认行为，正常的话点击超链接回跳转，这里进行了取消
+               // 但是vue里可以不需要写这个方法,进行取消默认行为
+               //    直接变为@click后面写上.prevent  即为  @click.prevent
+
+               //  event.stopPropagation() 阻止冒泡，当然vue也有对应方法
+                alert('魔法学院欢迎你！')
+                console.log(event.target);
+            },
+            showMsg(msg){
+                alert(msg);
+            },
+            demo(){
+                for (let i = 0; i < 10000; i++) {
+                    console.log('****');
+                }
+                console.log('累坏了');
+            }
+        }
+       });
+    </script>
+  </body>
+</html>

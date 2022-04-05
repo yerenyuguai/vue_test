@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 引入vue -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="root">
+        <h1>插值语法</h1>
+        <h3>{{name}},{{url}}</h3>
+        <h3>我是{{name}}，外号是{{school.name}}</h3>
+        <!-- 如果有重名的，变成这种即可 -->
+        <hr>
+        <h1>指令语法</h1>
+        <a href="http://www.baidu.com">点我去百度</a>
+        <a v-bind:href="url">去百度 指令语法</a>
+        <a :href="url">去百度 简写的指令语法</a>
+        <!-- a v-bind:href="url"       如果不写v-bind:  就是普通标签属性   写了，url就会当作js表达式去执行 -->
+    </div>
+    <!-- 
+    Vue模板语法有2大类:
+1.插值语法:
+功能:用于解析标签体内容。
+写法: {{xxx}}, xxx是js表达式，且可以直接读取到data中的所有属性。
+2.指令语法:
+功能:用于解析标签(包括:标签属性、标签体内容、绑定事件....).
+a :href='Date.now()'
+举例: v-bind:href-="xxx" 或简写为 :href="xxx", xxx同样要写js表达式，
+且可以直接读取到data中的所有属性。
+备注: Vue中有很多的指令，且形式都是: v_-???。 此处我们只是拿v-bind举个例子。
+     -->
+</body>
+<script>
+     Vue.config.productionTip=false;//可写可不写，看个人
+     new Vue({
+         el:'#root',
+         data:{
+             name:'拐子',
+             url:'http://www.baidu.com',
+             school:{
+                 name:'送财童子',
+                 age:20
+             }
+         }
+        
+     })
+</script>
+</html>

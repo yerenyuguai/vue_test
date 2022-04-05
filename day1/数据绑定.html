@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+        <!-- 引入vue -->
+        <script src="../js/vue.js"></script>
+        <!-- 
+            Vue中有2种数据绑定的方式:
+1.单向绑定(v-bind):数据只能从data流向页面。
+2.双向绑定(v-mode1):数据不仅能从data流向页面，还可以从页面流向data.
+备注:
+1.双向绑定一般都应用在表单类元素上(如: input、select等 )
+2.v-model:value可以简写为v-model, 因为v-model默认收集的就是value值。
+         -->
+</head>
+<body>
+    <div id="div">
+        单向数据绑定；<input type="text" :value="name">
+        即为我在检查中用vue修改数据,框内的数据也会随之修改，但是反过来却不能实现
+        <hr>
+        双向数据绑定；<input type="text" v-model:value="name">
+        而这个实现除了上面的功能，还可以修改框内数据来影响vue插件内的数据
+        <!-- 
+    <h2 v-model:x="name">你好</h2>
+    这个语句是错误的。因为x-model只能应用在表单类元素(输入类元素)上
+         -->
+
+    </div>
+</body>
+<script>
+     Vue.config.productionTip=false;//可写可不写，写了就没那一句警告
+     new Vue({
+         el:'#div',
+         data:{
+             name:'拐子'
+         }
+     })
+</script>
+</html>

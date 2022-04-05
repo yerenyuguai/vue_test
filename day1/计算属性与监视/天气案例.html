@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+  </head>
+
+  <body>
+    <!-- 被 vm 实例所控制的区域 -->
+    <div id="app">
+       <!-- <h2>今天天气很{{isHot?'炎热':'凉爽'}}</h2> -->
+        <h2>今天天气很{{info}}</h2>
+        <button @click="changeweather">切换天气</button>
+        <button @click="isHot=!isHot">切换天气 @符click后面可以写简单语句</button>
+        <!-- 绑定事件的时候 :@xxx='yyy' yyy可以写一些简单的语句 -->
+    </div>
+
+    <script>
+        Vue.config.productionTip=false;
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+            isHot:true //默认为炎热 false为凉爽
+        },
+        computed:{
+            info(){
+                return this.isHot?'炎热':'凉爽'
+            }
+        },
+        methods: {
+            changeweather(){
+                this.isHot=!this.isHot;//和上面的this都是指向的vm
+            }
+        },
+       });
+    </script>
+  </body>
+</html>

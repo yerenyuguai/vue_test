@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+  </head>
+<!-- 
+    一条重要的内置关系  VueComponent.prototype.__proto__===Vue.prototype  ⭐⭐⭐⭐⭐⭐⭐⭐
+他们本该是平级， VueComponent.prototype的原型本该指向Object的原型对象
+但vue强制让 VueComponent的原型对象的__proto__指向Vue的原型对象，作为最后的兜底，之后最后去Object
+    实例的隐式原型属性，永远指向自己缔造者的原型对象
+    这个关系存在的必要性 让组件实例对象（VueComponent）可以访问到Vue原型上的方法、属性⭐⭐⭐⭐⭐⭐
+ -->
+  <body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+        <school></school>
+        <!-- 这个不写 就不会new一个VueComponent实例 -->
+    </div>
+
+    <script>
+        Vue.config.productionTip=false;
+
+        Vue.prototype.x=99 // 向vue的原型添加一个属性x，值为99
+        //定义school组件
+        const school=Vue.extend({
+            template:
+            `
+            <div><h2>{{name}}</h2>
+                <button @click="showX">点我输出x</button></div>
+            `,
+            data() {
+                return {
+                    name:'你的回话凌乱着，在这个时刻'
+                }
+            },
+            methods: {
+                showX(){
+                    console.log(this.x);//  this就是组件实例对象vc
+                }
+            },
+        })
+
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+            mag:'美人鱼的眼泪。是一颗连伤心都会透明的世界'
+        },
+        components:{
+            school
+        }
+       });
+
+       //VueComponent.prototype.__proto__===Vue.prototype  VueComponent生成需要调用，所以
+       console.log(school.prototype.__proto__===Vue.prototype);
+
+       console.log('------下面是js原型相关-----');
+       function Demo(){
+           this.a=1,
+           this.b=2
+       }
+       //创建一个Demo的实例对象
+       const d=new Demo();
+       console.log(Demo.prototype);//原型属性
+       console.log(d.__proto__);
+       console.log(Demo.prototype===d.__proto__);
+       //通过显示原型属性操作原型对象，追加一个属性，值为99
+      // Demo.prototype.x=99;
+       console.log(d,"@",d.x,"@",d.__proto__.x);
+    </script>
+  </body>
+</html>

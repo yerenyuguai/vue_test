@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+  </head>
+<!-- 
+    computed和watch之间的区别:
+1. computed能完成的功能，watch都可以完成。
+2. watch能完成的功能，computed不一定能完成，例如: watch可以进行异步操作。
+两个重要的小原则:
+1.所被Vue管理的函数，最好写成普通函数，这样this的指向才是vm或组件实例对象。
+2.所有不被Vue所管理的函数(定时器的回调函数数、ajax的回调函数,Promise的回调函数等)，最好写成简头兩数，
+这样this的指向才是vm或组件实例对象。
+
+箭头函数this是该函数的拥有者，普通函数this是该函数的调用者。  ⭐⭐⭐
+ -->
+  <body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+        姓： <input type="text" v-model="firstname"><br><br>
+        名： <input type="text" v-model="lastname"><br><br>
+        全名：<span>{{fullname}}</span>
+    </div>
+    </div>
+
+    <script>
+        Vue.config.productionTip=false;
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+            firstname:'拐',
+            lastname:'子',
+            fullname:'拐子'//需要自己配置好一个初始的值
+        },
+        watch:{
+            firstname(newValue){
+                setTimeout(()=>{//  定时器所指向的回调是js引擎调用的
+                    console.log(this);//这样的this就指向的是firstname所指向的vm
+                    // 因为箭头函数没有this，就往外找，这时候就找到了firstname，他的this指向vm
+                    //从而避免了 this指向window
+                    // setTimeout(function(){})这个就有this，指向的是window，定时器所指向的回调是js引擎调用的
+                    this.fullname=newValue+''+this.lastname;
+                },1000)
+            },
+            lastname(newValue){
+                this.fullname=this.firstname+''+newValue;
+            }
+        }
+       });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+  </head>
+  <!-- 
+      收集表单数据:
+若: <input type="text"/>,则v-model收集的是value值,用户输入的就是value值。
+若: <input type="radio"/>,则v-model收集的是value值,且要给标签配置value值。
+若: <input type="checkbox"/>
+1.没有配置input的value属性，那么收集的就是checked (勾选or未勾选，是布尔值)
+2.配置input的value属性:
+(1)v- mode1的初始值是非数组。那么收集的就是checked (勾选or未勾选，是布尔值)
+(2)v- mode1的初始值是数组，那么收集的的就是value组成的数组(所以下面才写了userinfo)
+备注: 
+v-model的三个修饰符:
+lazy:失去焦点再收集数据
+number:输入字符串转为有效的数字
+trim:输入首尾空格过滤
+   -->
+  <body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+        <!-- 只要点提交,就调用submit这个方法  提交后跳转页面是默认行为,取消默认行为 .prevent -->
+        <form @submit.prevent="submit"> 
+            <label for="demo">账号:</label>
+            <!-- v-model.trim 去掉前后的空格  比如用户输入"    zhangghao   "  变为"zhangghao" -->
+            <input type="text" id="demo" v-model.trim="userinfo.account"><br>
+            <!-- 这样点击账号两个字也可以聚焦文本框 -->
+            密码: <input type="password" v-model="userinfo.password"><br>
+            性别: 
+            <!-- v-model默认收集的是输入框的value值   但是下面的勾选框没有输入框 所以要手动写value值
+              name 标识这两个是一组的 这样就实现了只能单选-->
+            男<input type="radio" name="sex"  v-model="userinfo.sex" value="男">
+            女<input type="radio" name="sex"  v-model="userinfo.sex" value="女"><br>
+            <!-- v-model="userinfo.age"默认年龄是字符串形式    v-model.number="userinfo.age"   火狐不兼容 
+               type="number" 这个保证只能输入数字        v-model.number="userinfo.age" vue自动帮你转换为数字 
+            一般这两个同时使用-->
+            <!--   一个点  数字框可以输入e
+                这是由于 e 在数学上代表 2.71828，因此它也是一个数字，所以允许输入。
+             -->
+            年龄: <input type="number" v-model.number="userinfo.age"><br>
+            爱好: 
+            <!-- 多组勾选框要配置value,否则默认读取的是checked(勾选就是true,没勾选就是false)
+            同时v-model绑定的值要变成数组形式 -->
+            抽烟<input type="checkbox" v-model="userinfo.hobby" value="抽烟">
+            喝酒<input type="checkbox" v-model="userinfo.hobby" value="喝酒">
+            烫头<input type="checkbox" v-model="userinfo.hobby" value="烫头"><br>
+            所属校区
+            <select v-model="userinfo.city">
+                <option value=''>请选择校区</option>
+                <option value="bj">北京</option>
+                <option value="sz">深圳</option>
+                <option value="sh">上海</option>
+                <option value="zz">枣庄</option>
+            </select>
+            <br>
+            其他信息:
+            <!-- v-model="userinfo.other" 发现浏览器上vue显示的数据很敏感 按一下键盘就更新一下里面的内容
+为了取消敏感   v-model.lazy="userinfo.other" 变成这样  失去焦点的一瞬间(点别的框,或者提交)才会更新,减轻浏览器压力-->
+            <textarea  cols="30" rows="10"  v-model.lazy="userinfo.other" >
+            </textarea><br>
+            <!-- 这个不需要获取value,只需要判断是否勾选   勾选上就是true-->
+            <input type="checkbox" v-model="userinfo.agree">
+            阅读并接受<a href="http://www.baidu.com">用户协议</a> <br>
+            <button>提交</button>
+        </form>
+    </div>
+
+    <script>
+        Vue.config.productionTip=false;
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+            userinfo:{   
+            account:'',
+            password:'',
+            sex:'',
+            age:'',
+            hobby:[],//hobby的初始值会影响v-model收集来的数据  hobby:''不可以
+            city:'bj',// 默认北京的话,就初始化将北京的value赋值给city
+            other:'',
+            agree:'',
+            },
+        },
+        methods: {
+            submit(){
+                alert('提交成功!')
+                //输出表单的数据
+                //  ajax 前后端交互一般都把数据转换为json格式交给后端
+                
+                // console.log(JSON.stringify(this._data));这个可以但是不推荐访问_data
+                // 可以将data里用来提交的数据全放在一个userinfo的对象
+                // 这样的话就需要添加一个 每个v-model都要加一个前缀 变为userinfo.xxxx
+                console.log(JSON.stringify(this.userinfo));
+            }
+        },
+       });
+    </script>
+  </body>
+</html>

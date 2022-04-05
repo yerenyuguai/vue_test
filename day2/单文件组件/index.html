@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>练习单文件组件的语法</title>
+    <!-- 脚手架   CLI command line interface(命令行接口工具)
+    1 安装 终端 全局安装 @vue/cli    即为npm install -g @vue/cli
+    2 切换到要创建项目的目录 使用命令 vue create xxxxx
+    3 启动项目 npm run serve -->
+
+<!-- 
+关于不同版本的Vue:
+1.  vue.js与vue.runtime.xxx. js的区别:
+(1).vue.js是完整版的Vue，包含:核心功能+模板解析器。
+(2)，vue.runtime.xx.js是运行版的Vue,只包含:核心功能:没有模板解析器。
+2.因为vue.runtime.xx.js没有模板解析器，所以不能使用template配置项，需要使用
+render函数接收到的createElement雨数去指定具体内容。
+
+ -->
+    <!--   <noscript></noscript>  当浏览器不支持js的时候，这个标签内的属性就会被渲染 -->
+</head>
+<body>
+    
+    <div id="root">
+        <App></App>
+        <!-- 建议写在下面，先让模板出来再引入js -->
+<script src="../../js/vue.js"></script>
+<script src="./main.js"></script>
+    </div>
+</body>
+
+</html>

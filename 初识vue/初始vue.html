@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./js/vue.js" ></script>
+    <!-- vue.js是开发版本            vue.min.js是生产版本的vue -->
+</head>
+ <!-- 按住shift 刷新是强制刷新 -->
+ <!-- 
+        初识Vue: 
+1.想让Vue工作，就必须创建个Vue实例，且要传入一个配置对象;
+2. root容器里的代码依然符合html规范，只不过混入了一些特殊的Vue语法;
+3. root容器里的代码被称为[Vue模板] ;
+4. Vue实例和容器是一一对应的;
+5. 真实开发中只有一个Vue实例，并会配合着组件起使用:
+6. {{xxx}}中的xxx要 写js表达式，而且xxx可以自动读取到data中的所有属性:
+7. 一旦data中的数据发生改变， 那么模板中用到该数据的地方也会自动更新;
+
+注意区分: js表达式和js代码(语句)
+1.表达式:一个表达式会产生一个值， 可以放在任何一个需要值的地方:  例子如下
+(1)   a
+(2)   a+b
+(3)  demo(1)
+(4)   x===y?'a':'b'
+2. js代码(语句)   例子如下
+(1)  if(){}
+(2)  for(){}
+  -->
+<body>
+    <!-- 
+        准备好一个容器
+     -->
+     <div class="root">
+         <h1>hello{{name}}</h1>     
+         <!--    {{}}   插值语法 -->
+         <!-- <h1>hello{{name}} {{address}}</h1>    -->
+         <!-- {{address}} 写在里面不起作用，vue实例和容器意义对应，address是第二个vue实例里的-->
+         <h1>我的年龄是{{age}},{{engname.toUpperCase()}}</h1>
+     </div>
+     <div class="root">
+        <h1>我的年龄是{{age}}</h1>
+        <!-- 一个vue实例只能对应一个容器 ，虽然在同一个实例，但是是两个容器，按照先后顺序  -->
+    </div>
+</body>
+<!-- 
+浏览器安装了vue对应的插件后，打开浏览器检查，导航栏末尾有一个vue，点击后，可以对vue实例进行修改
+ -->
+<script>
+    /*
+    productionTip
+类型：boolean
+默认值：true
+用法：
+设置为 false 以阻止 vue 在启动时生成生产提示。
+    */
+   Vue.config.productionTip=false;
+
+   //创建Vue的实例  只传一个参数 {} 对象
+   new Vue({
+       el:'.root' ,//el element元素  指定当前vue实例为哪个容器服务，值为css选择器的字符串  #是id,  .是class   
+       data:{
+           name:'邵昱赫',
+           age:'21',//data用来存储数据，供el所指定的容器去使用，值可以是一个对象，或者函数
+           engname:'shaoyuhe'
+       }
+   });
+   /*
+   new Vue({
+       el:'.root' ,
+       data:{
+           address:'地球'
+       }
+   });
+   vue实例和容器只能一一对应，上面的实例已经和root绑定，这个写浏览器不会生效且报错
+   */
+</script>
+</html>

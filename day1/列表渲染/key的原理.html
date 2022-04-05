@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+  </head>
+<!-- 
+    ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+面试题: react、vue中的key有什么作用? (key的内部原理)
+1.虚拟DOM中key的作用 
+key是虚拟DOM对象的标识，当状态中的数据发生变化时，Vue会根据 [新数据]生成[新的虚拟dom]
+随后Vue进行[新虚拟DOM]与[旧虚拟DOM]的差异比较(diff算法)，比较规则如下:
+2.对比规则:
+(1).旧虚拟DOM中找到了与新虚拟DOM相同的key:
+①.若虚拟DOM中内容没变，直接使用之前的真实DOM（用户填写的数据都是在真是DOM中，所以虚拟dom中分辨不出来）
+②.若虚拟DOM中内容变了，则生成新的真实DOM，随后替换掉页面中之前的真实DOM.
+(2).旧虚DOM中未找到与新虚拟DOM相同的key
+创建新的真实DOM.随后渲染到到页面。
+3. 用index作为key可能会引发的问题:
+1.若对数据进行:逆序添加、逆序删除等破环顺序操作:
+会产生没有必要的真实DOM更新==>界面效果没问题，但效率低。
+如果结构中还包含输入类的DOM: 
+会产生错误DOM更新==>界面有问题。
+.开发中如何选择key?:
+1.最好使用每条数据的唯标识作为key,比如id、手机号、身份证号、学号等唯值。
+
+⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+因为vue分辨不出提供哪一个数据是标识，所以自己弄了一个index，做diff算法比较，为了复用
+又因为比较的是虚拟dom，而比如input标签里填写的内容，这是真实dom里的，虚拟dom里面没有填写的内容，
+所以在虚拟dom里面比较是一样的，所以，直接复用之前的，这就导致了原来标签里的文本直接复用到新的标签里
+
+
+
+2.如果不存在对数据的逆序添加、逆序删除等破坏顺序操作，仅用于渲染列表用于展示，
+使用index作为key是没有间题的。
+ -->
+  <body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+      <!-- 遍历数组 -->
+      <button @click.once="add">添加一个 苍蝇(key index)</button>
+      <ul>
+
+        <li v-for="(p,index) of persons" :key="key">{{p.name}}-{{p.nickname}}<input type="text"></li>
+        
+      </ul>
+      <hr>
+      <!-- 在文本框输入输入内容后在点击按钮，观察变化 -->
+      <button @click.once="add">添加一个 苍蝇(key in)</button>
+      <ul>
+
+        <li v-for="(p,index) of persons" :key="p.id">{{p.name}}-{{p.nickname}}<input type="text"></li>
+        
+      </ul>
+    </div>
+
+    <script>
+        Vue.config.productionTip=false;
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+          persons:[
+            {id:'001',name:'拐子',nickname:'送财童子'},
+            {id:'002',name:'野浩',nickname:'噶奶居士'},
+            {id:'003',name:'洪少',nickname:'蛮横狂徒'},
+          ],
+        },
+        methods: {
+            add(){
+                const p={id:'004',name:'苍蝇',nickname:'嗡嗡乱飞'}
+                this.persons.unshift(p); //让苍蝇添加到队首
+               
+            }
+        },
+       });
+    </script>
+  </body>
+</html>

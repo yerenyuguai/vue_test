@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+        <h2>今天天气很{{info}}</h2>
+        <button @click="changeweather">切换天气</button>
+    </div>
+
+    <script>
+        Vue.config.productionTip = false;
+        //创建 vm 实例对象
+        const vm = new Vue({
+            //指定控制的区域
+            el: '#app',
+            data: {
+                isHot: true,//默认为炎热 false为凉爽
+            },
+            computed: {
+                info() {
+                    return this.isHot ? '炎热' : '凉爽'
+                }
+            },
+            methods: {
+                changeweather() {
+                    this.isHot = !this.isHot;//和上面的this都是指向的vm
+                }
+            },
+            watch: {
+                // 常规写法
+                /*
+                isHot:{
+                    immediate:true,//初始化的时候让handler调用
+                    deep:true,//深度监视
+                    handler(newValue,oldValue){
+                        console.log('isHot被修改了',newValue,oldValue);
+                    },
+                }
+                */
+                //简写  前提是 immediate和deep属性不需要配置
+                // 类似handler
+                isHot(newValue, oldValue) {
+                    console.log('isHot被修改了', newValue, oldValue);
+                }
+            },
+        });
+        //第二个的常规写法
+        /*
+        vm.$watch('isHot', {
+            immediate: true,//初始化的时候让handler调用
+            deep: true,//深度监视
+            handler(newValue, oldValue) {
+                console.log('isHot被修改了', newValue, oldValue);
+            },
+        })
+        */
+
+        //简写  
+        /*  同样不推荐用箭头函数
+        vm.$watch('isHot',function(){
+            console.log('isHot被修改了', newValue, oldValue);
+        })
+        */
+    </script>
+</body>
+
+</html>

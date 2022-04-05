@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+  </head>
+
+  <body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+        <h1>人员列表</h1>
+        <!-- v-model="keyword" 接受用户的输入 -->
+        <input type="text" placeholder="请输入名字" v-model="keyword">
+        <ul>
+            <li v-for="(p,index) in filPersons" :key="p.id">
+                {{p.name}}-{{p.sex}}
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        Vue.config.productionTip=false;
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+            persons:[
+                {id:'001',name:'马冬梅',sex:'女',age:'19'},
+                {id:'002',name:'周冬雨',sex:'女',age:'18'},
+                {id:'003',name:'周杰伦',sex:'男',age:'21'},
+                {id:'004',name:'温兆伦',sex:'男',age:'20'}
+            ],
+            keyword:'',
+           //   filPersons:[]  watch实现时要用到，computed实现不需要
+
+        },
+        // 用watch实现过滤
+
+        /*
+
+        watch:{
+            keyword:{
+                immediate:true,//immediate:true;  这个属性可以初始化时让handler调用一下 ⭐⭐⭐⭐⭐⭐⭐⭐
+                // 首先默认执行一次handler，但什么也没有输入，就是空串，任何字符串都含有空串，且索引为0
+                //这样就相当于把每个都遍历输出了一遍，实现了初始化的效果
+                handler(val){
+                console.log('keyword被修改了',val);
+                //filter过滤数组
+                this.filPersons=this.persons.filter((p)=>{
+                    return p.name.indexOf(val)!==-1;//判断p.name中是否含有val，没有返回-1，有返回所在的索引
+                    //返回值是布尔值，将值赋值给this.filPersons，false的话就不显示，true就显示
+                })
+            }
+        }
+        }
+
+        */
+         //用conputed计算实现
+        computed:{
+            filPersons(){
+                return this.filPersons=this.persons.filter((p)=>{//这个return是filPersons要求的，需要一个返回值
+                    return p.name.indexOf(this.keyword)!==-1;//这个return是filter要求返回的
+                })
+            }
+        }
+    });
+    </script>
+  </body>
+</html>

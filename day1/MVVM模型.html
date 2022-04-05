@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!--  vue的设计是收到了MVVM模型的启发
+     Model(对应data中的数据) View(模板，亦或是模板) ViewModel(Vue实例对象) 
+    
+     1.data中所有的属性，最后都出现在了vm身上，
+     2.vm身上所有的属性，以及vm原型上所有的属性，在vue框架上都可以直接使用
+    -->
+    <!-- 引入vue -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="div">
+        <h1>名字：{{name}}</h1>
+        <h1>年龄：{{age}}</h1>
+        <h1>测试一下1+1=：{{1+1}}</h1>
+        <h1></h1>
+    </div> 
+       <!--这个div就是  view  -->
+</body>
+<script>
+    // new Vue({}) 就是ViewModel  所以一般都用vm这个变量名来表示Vue实例
+    const vm=new Vue({
+        el:'#div',
+        data:{
+            name:'拐子',
+            age:20
+            // 这两个就是model
+        }
+    })
+    console.log(vm);
+    //  
+</script>
+</html>

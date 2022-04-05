@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+  </head>
+<!-- 
+    v-once指令所在节点在初次动态渲染后,就视为静态内容了
+    以后数据的改变都不会引起v-once所在结构的更新,可以用于优化性能
+ -->
+  <body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+        <!-- v-once 和 v-cloak 他俩都是没有值的 -->
+        <h2 v-once>初始化的n值{{n}}</h2>
+        <h2>当前的值是 {{n}}</h2>
+        <button @click="n++">点我数字加1</button>
+    </div>
+
+    <script>
+        Vue.config.productionTip=false;
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+            n:0
+        },
+       });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+  </head>
+<!-- 
+    几个注意点:
+1.关于组件名:
+一个单词组成:
+第一种写法(首字母小写): school
+第二种写法(首字母大写): School
+多个单词组成: 
+第一种写法(kebab-case命名): my-school  但是要加引号
+第二种写法(CamelCase命名): MySchool (需要Vue脚手架支持)
+备注: 
+(1).组件名尽可能回避HTML中已有的元素名称，例如: h2、 H2都不行.
+(2).可以使用name配置项指定组件在开发者工具中呈现的名字。
+2.关于组件标签;
+第一种写法: <school></school>
+第二种写法: <school/>
+备注:不用使用脚手架时，<schoo1/>会导致后续组件不能渲染。
+3.一个简写方式:
+const school = Vue.extend(options)可简写为: const school = options
+ -->
+  <body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+        <my-school></my-school>
+        <!-- 下面的形式是自闭合 -->
+        <hr>
+        <my-school/>
+        <my-school></my-school>
+        <!-- 这个就不生效  不用使用脚手架时，<schoo1/>会导致后续组件不能渲染。 -->
+    </div>
+
+    <script>
+        Vue.config.productionTip=false;
+        // 定义组件
+        const s={
+            name:'haihaihai',
+            //无论谁调用这个组件，检查里vue开发者工具里的名字就是这个，如果不写就是components:
+            // 即为(2).可以使用name配置项指定组件在开发者工具中呈现的名字。
+            template:`
+            <div>
+                <h1>学校名称:{{name}}</h1>
+                <h1>学校地址:{{address}}</h1>
+            </div>
+            `,
+            data() {
+                return {
+                    name:'山东拐大',
+                    address:'嘉里敦'
+                }
+            },
+        }
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+            name:'嗨嗨害',
+        },
+        components:{
+            'my-school':s
+        }
+       });
+    </script>
+  </body>
+</html>

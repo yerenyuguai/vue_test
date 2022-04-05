@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+    <style>
+        .basic{
+            width: 400px;
+            height: 100px;
+            border: 1px solid black;
+        }
+        .happy{
+            background-image: linear-gradient(to bottom right, red, yellow);
+        }
+        .sad{
+            background-image: linear-gradient(to bottom, brown,grey);
+        }
+        .normal{
+            background-image: linear-gradient(to bottom, blue,green);
+        }
+        .shao1{
+            border-radius: 20px;
+        }
+        .shao2{
+            text-shadow: 2px 2px 8px blue;
+        }
+        .shao3{
+            text-align: center;
+        }
+
+    </style>
+  </head>
+<!-- 
+    绑定样式:
+1. class样式
+写法   :class="xxx"     xxx可以是字符串、对象、数组。
+字符串写法适用于:类名不确定，要动态获取.
+对象写法适用于:要绑定多个样式，个数不确定，名字也不确定。
+数组写法适用于:要绑定多个样式，个数确定，名字也确定，但不确定用不用。
+2. style样式
+:style=" {fontSize: xx}" 其中xxx是动态值。
+:sty1e="[a,b]"其中a、b是样式对象。
+ -->
+  <body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+        <!-- <div class="basic happy shao1 shao2 shao3">text</div> -->
+        <!-- 
+            绑定class样式的字符串写法，适用于 样式类名不确定，需要动态决定
+         -->
+        <div class="basic" @click="changemood"  :class="mood">{{name}}</div>
+        <hr>
+        <!-- 绑定class样式的数组写法， 适用于  要绑定的样式个数不确定，样式类名也不确定 -->
+        <div class="basic" :class="arr">{{name1}}</div>
+        <hr>
+        <!-- 绑定class样式的对象写法， 适用于  要绑定的样式个数确定，名字也确定，但是要动态决定用不用 -->
+        <div class="basic" :class="classobj">{{name2}}</div>
+        <hr>
+
+        <!-- <div class="basic" :style="{fontSize:fsize+'px'}">{{name1}}</div> -->
+        <!--  这种形式要求style后面的值变为对象才能解析
+            font-size 作为属性名不合法，vue要求驼峰命名法   去掉杠，然后，第二个单词首字母大写 
+        -->
+        <!-- 亦或是下面的写法 -->
+        <div class="basic" :style="styleobj">{{name1}}</div>
+        <hr>
+        <!-- 也可以用数组的形式，同时用多个样式 -->
+        <div class="basic" :style="[styleobj,styleobj2]">{{name1}}</div>
+
+    </div>
+
+    <script>
+        Vue.config.productionTip=false;
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+            name:'点我换心情',
+            mood:'normal',
+            name1:'拐子',
+            arr:['shao1','shao2','shao3'],
+            name2:'野浩',
+            classobj:{
+                shao1:false,// false就表示这个样式不生效
+                shao2:false,
+            },
+            fsize:40,
+            styleobj:{fontSize:'40px'},
+            styleobj2:{
+                backgroundColor:'orange'
+            }
+        },
+        methods: {
+            changemood(){
+                //  this.mood='happy'  固定指定心情
+                // 点击随机生成心情
+                const arr=['happy','sad','normal'];
+                // math.floor()向下取整
+                var index=Math.floor(Math.random()*3);
+                this.mood=arr[index];
+                console.log(index);
+            },
+
+        },
+       });
+    </script>
+  </body>
+</html>

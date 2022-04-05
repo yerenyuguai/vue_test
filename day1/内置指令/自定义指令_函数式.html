@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+  </head>
+<!-- 
+    定义一个v-big指令,和v-text功能类似,但会把绑定的数值放大10倍
+ -->
+  <body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+        当前的n值是:<h3 v-text="n"></h3>
+        放大十倍的n值是:<h3 v-big="n"></h3>
+        <button @click="n++">点击我n++</button>
+    </div>
+
+    <script>
+        Vue.config.productionTip=false;
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+            n:1
+        },
+        // 指令  和data同级
+        directives:{
+            
+            //big函数什么时候会被调用呢  
+            //  1.指令与元素成功绑定的时候(一上来) 
+            // 2.指令所在的模板被重新解析的时候(数据被修改不管是不是n,都会重新解析)
+
+            // (参数1,参数2)  参数1指令所在的真实dom元素  参数2是一个对象,里面有个value,就是这里的n
+            big(element,binding){
+                //查看这些参数分别代表什么
+                console.log(element,binding);
+                console.log(binding.value);
+
+                //dom语句进行将inner文本修改 
+                element.innerText=binding.value*10;
+            }
+        }
+       });
+    </script>
+  </body>
+</html>

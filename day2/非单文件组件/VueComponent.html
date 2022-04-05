@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+  </head>
+<!-- 
+    关于VueComponent:
+1. school组件本质是个名为VueComponent的构造函数，且不是程序员定义的，是Vue.extend生成的。
+2.我们只需要写<schoo1/>或<school></school>. Vue解析时会帮我们创建schoo1组件的实例对象，
+即Vue帮我们执行的: new VueComponent(options).
+3.特别注意:每次调用Vue.extend,返回的都是一个 全新的VueComponent!!!!
+4.关于this指向:
+(1).组件配置中:
+datahanshu1、methods中的函数、watch中的函数、computed中的函数，它们的this均是[VueComponent实例对象]。
+(2) .new Vue()配置中:
+data函数、methods中的函数、watch中的函数、computed中的函数，它们的this均是[Vue实例对象]。
+5. VueComponent的实例对象，以后简称vc(也可称之为:组件实例对象)。
+Vue的实例对象，以后简称vm.他俩功能一样，也有数据代理，也有数据监视
+检查终端 输入vm 输出找到$children发现两个VueComponent就在里面 
+ -->
+  <body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+        <my-school></my-school>
+        <!-- 这段代码生成了一个VueComponent -->
+        <hello></hello>
+        <!-- 这段代码生成了另外一个新的VueComponent -->
+    </div>
+
+    <script>
+        Vue.config.productionTip=false;
+       // 定义组件
+       const school=Vue.extend({
+            template:`
+            <div>
+                <h1>学校名称:{{name}}</h1>
+                <h1>学校地址:{{address}}</h1>
+            </div>
+            `,
+            data() {
+                return {
+                    name:'山东拐大',
+                    address:'嘉里敦'
+                }
+            },
+        })
+         // 定义组件
+       const hello=Vue.extend({
+            template:`
+            <div>
+                <h1>你好啊,{{name}}</h1>
+            </div>
+            `,
+            data() {
+                return {
+                    name:'树哥',
+                }
+            },
+        })
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+            name:'嗨嗨害',
+        },
+        components:{
+            'my-school':school,
+            hello
+        }
+       });
+
+       console.log('@1',school);
+       console.log("@2",hello);
+       console.log(school==hello);//输出false，这也说明了两个VueComponent不是同一个
+       //尽管一摸一样，尽管实现功能一样
+       /*
+       vue源码里这样写到
+
+       Vue.extend=function(extendoptions){
+           ...
+           var Sub=function VueComponent(options){
+               this._init(options)
+           };
+           ...
+           return Sub
+       }
+       观察发现每次调用Vue.extend()，都会现定义一个var Sub，然后被赋值(值就是VueComponent)之后，返回
+       这样每次调用都是现定义现返回，所以这两个VueComponent不是同一个
+       */
+    </script>
+  </body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+  </head>
+
+  <body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+        <h2>窗外的麻雀,{{name}}</h2>
+        <h2>你说这一句,{{name1}}</h2>
+        <h2>歌曲第一个字 {{song.name}}</h2>
+        <h2>歌曲第二个字 {{song.name1}}</h2>
+        <h2>朋友们</h2>
+        <button @click="add">添加一个性别，默认为男</button>
+        <!-- 有song.sex就展示，没有就不展示 -->
+        <h2 v-if="song.sex">性别{{song.sex}}</h2>
+        <ul>
+            <li v-for="(f,index) in song.friends" :key="index">{{f.name}}--{{f.age}}</li>
+        </ul>
+    </div>
+
+    <script>
+        // 响应式     页面检查中进行修改，页面也会及时做出响应随之调整
+        Vue.config.productionTip=false;
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+            name:'在电线杆上多嘴',
+            name1:'很有夏天的感觉',
+            song:{
+                name:'七',
+                name1:'里',
+                name2:'香',
+                friends:[
+                {name:'小红',age:20},
+                {name:"小绿",age:21}
+                 ]
+            },
+        },
+        methods: {
+            add(){
+                Vue.set(this.song,"sex",'男');
+                //这个方法就是额外添加一个属性(要添加到哪个对象,添加的属性名,属性值)
+                //  vm.$set(this.song,"sex",'男');  效果一样
+                
+                //Vue.set()只能给data里的对象添加属性,不能给data添加属性
+                //  即为  ❌ Vue.set(data) 
+                //  √    Vue.set(data.song)
+
+                /*
+向响应式对象中添加一个属性,并确保这个新属性同样是响应式的.且触发视图更新。
+它必须用于向响应式对象上添加新属性,因为Vue无法探测普通的新增属性 (此如this .myobject .newProperty =‘hi' )
+注意对象不能是Vue实例(vm)，或者Vue实例的根数据对象(data)。
+                */
+            }
+        },
+       });
+    </script>
+  </body>
+</html>

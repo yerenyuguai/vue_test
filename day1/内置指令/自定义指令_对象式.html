@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+</head>
+<!-- 
+    定义一个 v-fbind指令,和v-bind功能类似,但可以让其所绑定的input元素默认获取焦点
+
+    这里不用函数式的原因是    1.指令与元素成功绑定的时候(一上来) 
+    如果是函数式,一上来先进行绑定,聚焦,之后再插入页面就不聚焦了
+ -->
+
+ <!-- 
+     自定义指令 总结
+     一.定义语法
+        1.局部指令
+          new Vue({                                            new Vue({     
+              directives:{指令名:配置对象}      或者          directives(){}
+          })                                                  )}
+        2.全局指令
+          Vue.directive(指令名:配置对象)     或者    Vue.directive(指令名,回调函数)
+    二. 配置对象中常用的三个回调
+       1   bind()  指令与元素成功绑定时调用
+       2   inserted() 指令所在元素插入页面时调用
+       3   update()  指令所在模板结构被重新解析时候调用
+    三.备注
+       1. 指令定义时候不加v-  但使用的时候要加 v-
+       2. 指令名如果是多个单词,
+要使用kebab-case命名方式(短横线分隔命名 (烤肉串式)，字母全小写，单词与单词之间用“连字符”链接),
+不要用camelCase (驼峰式) 命名 
+  -->
+<body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+        <!-- <input type="text" v-bind:value="name" autofocus>   autofocus这个可以自动获取焦点(不一定适配所有浏览器)
+     但本节用自定义指令实现-->
+        <input type="text" v-fbind:value="name">
+        <button @click="name++">点击我n++</button>
+    </div>
+
+    <script>
+        Vue.config.productionTip = false;
+
+        //写成全局形式的自定义指令 directive 注意没有s  下面的是局部的,这是全局的
+        Vue.directive('fbind', {
+            bind(element, binding) {
+                console.log('bind', this);//这里的this是window
+                //  所有指令相关的回调函数的this都是window,而不是vm⭐⭐⭐⭐
+                element.value = binding.value;
+            },
+            //2.指令所在元素被插入页面时
+            inserted(element, binding) {
+                console.log('inserted');
+                element.focus();//获取焦点 
+            },
+            //3.指令所在模板被重新解析时
+            update(element, binding) {
+                console.log('update');
+                element.value = binding.value;
+                element.focus();
+            }
+        })
+
+        //创建 vm 实例对象
+        const vm = new Vue({
+            //指定控制的区域
+            el: '#app',
+            data: {
+                name: 1
+            },
+            directives: {
+                fbind: {
+                    //注意看这三个方法出现的先后顺序
+                    // (参数1,参数2)  参数1指令所在的真实dom元素  参数2是一个对象,里面有个value,就是这里的n
+                    //  1.指令与元素成功绑定的时候(一上来) 
+                    bind(element, binding) {
+                        console.log('bind', this);//这里的this是window
+                        //  所有指令相关的回调函数的this都是window,而不是vm⭐⭐⭐⭐
+                        element.value = binding.value;
+                    },
+                    //2.指令所在元素被插入页面时
+                    inserted(element, binding) {
+                        console.log('inserted');
+                        element.focus();//获取焦点 
+                    },
+                    //3.指令所在模板被重新解析时
+                    update(element, binding) {
+                        console.log('update');
+                        element.value = binding.value;
+                        element.focus();
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

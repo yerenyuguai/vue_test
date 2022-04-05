@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+        <h2 :style="{opacity}">乌云在我们心里搁下一块阴影</h2>
+        <button @click="stop">点我听停止变化</button>
+        <button @click="opacity=1">点我透明度为1</button>
+    </div>
+
+    <script>
+        Vue.config.productionTip = false;
+        //创建 vm 实例对象
+        const vm = new Vue({
+            //指定控制的区域
+            el: '#app',
+            data: {
+                opacity: 1
+            },
+            methods: {
+                stop() {
+                 //clearInterval(this.time)//写这个的话，只是定时器关闭，但是响应式依然在，依然可以更改opacity
+                 //有个更暴力的办法    这样整个vm都销毁了，点我透明度为1按钮也失效了
+                 this.$destroy();
+                 //但clearInterval(this.time)注释掉的话，定时器就会一直开启，所以要在销毁前的函数进行停止
+                }
+            },
+            mounted() {
+                console.log(this);//this就是vm       
+                //不能这样写，获取不到的，他们平级互相看不到   const time=setInterval(() => {
+                     //往vm添加了一个属性time
+                this.time=setInterval(() => {
+                    console.log('计时中');
+                    this.opacity -= 0.01
+                    if (this.opacity <= 0) { this.opacity = 1 }
+                }, 16)
+            },
+            beforeDestroy() {
+                //销毁之前清除定时器
+               clearInterval(this.time)
+            },
+        });
+    </script>
+</body>
+
+</html>

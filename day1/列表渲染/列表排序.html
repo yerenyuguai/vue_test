@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+  </head>
+<!-- 
+    首先搜索人名，然后按照年龄升序降序进行排序，
+    就像搜索商品，然后对价格进行排序降序一样
+ -->
+  <body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+        <h1>人员列表</h1>
+        <!-- v-model="keyword" 接受用户的输入 -->
+        <input type="text" placeholder="请输入名字" v-model="keyword">
+        <button  @click="sortType=2">年龄升序</button>
+        <button  @click="sortType=1">年龄降序</button>
+        <button  @click="sortType=0">原来年龄</button>
+        <ul>
+            <li v-for="(p,index) in filPersons" :key="p.id">
+                {{p.name}}-{{p.sex}}-{{p.age}}
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        Vue.config.productionTip=false;
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+            persons:[
+                {id:'001',name:'马冬梅',sex:'女',age:'19'},
+                {id:'002',name:'周冬雨',sex:'女',age:'18'},
+                {id:'003',name:'周杰伦',sex:'男',age:'21'},
+                {id:'004',name:'温兆伦',sex:'男',age:'20'}
+            ],
+            keyword:'',
+            sortType:0 //默认 0 是原顺序，1是降序 ，2是升序
+        },
+         //用conputed计算实现
+        computed:{
+            filPersons(){
+                const arr=this.filPersons=this.persons.filter((p)=>{//这个return是filPersons要求的，需要一个返回值
+                    return p.name.indexOf(this.keyword)!==-1;//这个return是filter要求返回的
+                })
+                //判断一下是否需要排序
+                if(this.sortType){// 1,2 都为真   flase为假，即是0
+                    // 需要排序
+                    arr.sort((p1,p2)=>{  //注意p1 p2 是对象
+                      return  this.sortType===1?p2.age-p1.age:p1.age-p2.age;
+                      /*
+             *  浏览器会根据回调函数的返回值来决定元素的顺序
+			 *    返回值>0，二者交换位置
+			 *     =0，相等，不交换
+			 *     <0,不交换
+			 * 如果需要升序，则返回a-b;
+			 * 如果需要降序，返回b-a;
+                      */
+                    })
+                }
+                return arr;
+            }
+        }
+    });
+    </script>
+  </body>
+</html>

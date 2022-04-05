@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+     <!-- 引入vue -->
+     <script src="../../js/vue.js"></script>
+</head>
+<body>
+    回顾Object.defineproperty方法⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+</body>
+<script>
+    let gender='雄性'
+    let person={
+        name:'拐子',
+        age:'20'
+    }
+    
+    // Object.defineProperty(给哪个对象添加属性，添加的属性名，配置项(里面可以写很多的配置))
+    Object.defineProperty(person,'sex',{
+        // value:'雄性',  这样写就可以访问到了，但为了后面的知识，这里先注释掉
+
+        //下面的可以在浏览器终端进行测试 
+
+        // enumerable 可枚举的， 默认行为为false
+         //强制让它参与枚举(遍历)
+        // enumerable:true  
+
+        //同时这里的属性默认是不允许修改的，即在浏览器中进行修改值也不会变化
+        // writeable   默认为false
+        //强制让它可以修改
+        //writable:true
+
+        //同时的delete.person.sex 默认是不被允许的，输出为false，表示删除失败
+        // configurable  默认为false
+        //强制让其可以被删除
+        //configurable:true
+
+
+        //当需要读取person的sex属性时候，get函数（getter）就会被调用，且返回值就是sex的值
+        get:function(){  //  或者get(){}
+            console.log('有人读取sex属性了');
+           // return '雄性'  或者用外面的
+           return gender;  
+
+        },
+        //当修改person的sex属性时候，set函数(setter)就会被调用，且会收到修改的具体值
+        set(value){
+            console.log('有人修改了age属性,值为'+value);
+            gender=value;// 这样外边的gender也会更改
+            //浏览器终端 输入  person.sex='女' 进行更改，然后再输入person就发现更改
+        }
+       
+    })
+    console.log(person);
+    //  Object.key(对象)  可以把传入对象所有的属性名提取出来变成一个数组
+    console.log(Object.keys(person));
+    // 输出发现Object.defineProperty()添加的属性不参与枚举(遍历) 
+    
+</script>
+</html>

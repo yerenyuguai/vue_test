@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+  </head>
+<!-- 
+    首先搜索人名，然后按照年龄升序降序进行排序，
+    就像搜索商品，然后对价格进行排序降序一样
+ -->
+  <body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+        <h1>人员列表</h1>
+        <!-- v-model="keyword" 接受用户的输入 -->
+        <button @click="updateMei">更新马冬梅的信息</button>
+        <ul>
+            <li v-for="(p,index) in persons" ::key="p.id">
+                {{p.name}}-{{p.sex}}-{{p.age}}
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        Vue.config.productionTip=false;
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+            persons:[
+                {id:'001',name:'马冬梅',sex:'女',age:'19'},
+            ],
+        },
+        methods: {
+            updateMei(){
+                /*
+                this.persons[0].name='马保国',
+                this.persons[0].sex='男',
+                this.persons[0].age=60  这种形式也可以
+                */  
+               // 所以我们会理所当然地认为直接将这个对象整个替换，但是没有效果 ⭐⭐⭐⭐⭐
+              this.persons[0]={id:'001',name:'马保国',sex:'男',age:'60'}
+               // 浏览器上面没有更改，但实际上已经修改，只是vue没有检测到
+               //  可以把注释去掉 在浏览器终端 vm.persons[0]  进行查看
+
+               //如果先点击按钮，在点vue开发者工具查看，发现数据变了
+               //但是如果先点vue开发者工具，再点击按钮，发现没变，因为vue检测不到
+            }
+        },
+    });
+    </script>
+  </body>
+</html>

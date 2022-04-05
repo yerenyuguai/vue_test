@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 导入 vue 文件    注意路径不一定每一次都一样 -->
+    <script src="../../js/vue.js"></script>
+  </head>
+<!-- 
+    运行网页发现没有编译
+    v-pre指令    
+    1.跳过其所在节点的编译过程
+    2.可利用她跳过:  没有使用指令语法,没有使用插值语法的节点,从而加快编译
+ -->
+  <body>
+    <!-- 被 vm 实例所控制的区域  亦或是模板，容器-->
+    <div id="app">
+        <h2 v-pre>我爱VUE</h2>
+        <!-- 上面的那一行是没有动态内容的 -->
+        <h2 v-pre>当前的值是 {{n}}</h2>
+        <button @click="n++" v-pre>点我数字加1</button>
+        <!-- 即为v-pre 的vue就不再处理-->
+    </div>
+    <script>
+        Vue.config.productionTip=false;
+      //创建 vm 实例对象
+      const vm = new Vue({
+        //指定控制的区域
+        el:'#app',
+        data:{
+            n:1
+        },
+       });
+    </script>
+  </body>
+</html>
