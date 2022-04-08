@@ -62,11 +62,12 @@
         <hr>
 
         <!-- <div class="basic" :style="{fontSize:fsize+'px'}">{{name1}}</div> -->
-        <!--  这种形式要求style后面的值变为对象才能解析
+        <!--  这种形式要求style后面的值变为对象才能解析 ⭐⭐⭐⭐⭐⭐⭐⭐
             font-size 作为属性名不合法，vue要求驼峰命名法   去掉杠，然后，第二个单词首字母大写 
         -->
         <!-- 亦或是下面的写法 -->
-        <div class="basic" :style="styleobj">{{name1}}</div>
+        <!-- !styleobj  这样样式就不生效 -->
+        <div class="basic" :style="!styleobj">{{name1}}</div>
         <hr>
         <!-- 也可以用数组的形式，同时用多个样式 -->
         <div class="basic" :style="[styleobj,styleobj2]">{{name1}}</div>
